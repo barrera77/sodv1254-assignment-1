@@ -22,5 +22,5 @@ public partial class Dvd
 
     [ForeignKey("Dvdid")]
     [InverseProperty("Dvd")]
-    public virtual Medium DvdNavigation { get; set; }
+    public virtual MediaTypes DvdNavigation { get; set; }
 }

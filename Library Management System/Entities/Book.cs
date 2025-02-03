@@ -22,5 +22,5 @@ public partial class Book
 
     [ForeignKey("BookId")]
     [InverseProperty("Book")]
-    public virtual Medium BookNavigation { get; set; }
+    public virtual MediaTypes BookNavigation { get; set; }
 }

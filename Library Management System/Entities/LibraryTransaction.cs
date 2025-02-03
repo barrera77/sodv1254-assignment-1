@@ -30,5 +30,5 @@ public partial class LibraryTransaction
 
     [ForeignKey("MediaId")]
     [InverseProperty("LibraryTransactions")]
-    public virtual Medium Media { get; set; }
+    public virtual MediaTypes Media { get; set; }
 }

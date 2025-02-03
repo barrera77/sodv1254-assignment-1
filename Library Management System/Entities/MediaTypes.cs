@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library_Management_System.Entities;
 
-public partial class Medium
+public partial class MediaTypes
 {
     [Key]
     public int MediaId { get; set; }
