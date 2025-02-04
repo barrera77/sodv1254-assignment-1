@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library_Management_System.Entities;
 
-public partial class MediaTypes
+public partial class LibraryMedia
 {
     [Key]
     public int MediaId { get; set; }
@@ -22,11 +22,29 @@ public partial class MediaTypes
     [Required]
     public string MediaType { get; set; }
 
+    public string Description { get; set; }
+
+    public int? Duration { get; set; }
+
+    [Column(TypeName = "DATE")]
+    public DateTime CreationDate { get; set; }
+
+    public string Language { get; set; }
+
+    public int? GenreId { get; set; }
+
+    [InverseProperty("AudioBookNavigation")]
+    public virtual AudioBook AudioBook { get; set; }
+
     [InverseProperty("BookNavigation")]
     public virtual Book Book { get; set; }
 
     [InverseProperty("DvdNavigation")]
     public virtual Dvd Dvd { get; set; }
+
+    [ForeignKey("GenreId")]
+    [InverseProperty("LibraryMedia")]
+    public virtual Genre Genre { get; set; }
 
     [InverseProperty("Media")]
     public virtual ICollection<LibraryTransaction> LibraryTransactions { get; set; } = new List<LibraryTransaction>();

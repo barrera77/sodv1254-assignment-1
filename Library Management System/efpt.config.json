@@ -1,6 +1,6 @@
 ﻿{
    "CodeGenerationMode": 4,
-   "ContextClassName": "D:\\School\\Bow Valley College\\Second Term\\SODV1254Object Oriented Programming Concepts\\Assignment-1\\library.dbContext",
+   "ContextClassName": "Library.dbContext",
    "ContextNamespace": null,
    "FilterSchemas": false,
    "IncludeConnectionString": true,
@@ -15,6 +15,10 @@
    "T4TemplatePath": null,
    "Tables": [
       {
+         "Name": "AudioBook",
+         "ObjectType": 0
+      },
+      {
          "Name": "Book",
          "ObjectType": 0
       },
@@ -27,11 +31,15 @@
          "ObjectType": 0
       },
       {
-         "Name": "LibraryTransaction",
+         "Name": "Genre",
          "ObjectType": 0
       },
       {
-         "Name": "Media",
+         "Name": "LibraryMedia",
+         "ObjectType": 0
+      },
+      {
+         "Name": "LibraryTransaction",
          "ObjectType": 0
       }
    ],

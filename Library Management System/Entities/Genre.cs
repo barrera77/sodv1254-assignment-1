@@ -8,21 +8,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library_Management_System.Entities;
 
-[Table("DVD")]
-public partial class Dvd
+[Table("Genre")]
+[Index("Name", IsUnique = true)]
+public partial class Genre
 {
     [Key]
-    [Column("DVDId")]
-    public int Dvdid { get; set; }
+    public int GenreId { get; set; }
 
     [Required]
-    public string Director { get; set; }
+    public string Name { get; set; }
 
-    public string Actors { get; set; }
-
-    public string Subtitles { get; set; }
-
-    [ForeignKey("Dvdid")]
-    [InverseProperty("Dvd")]
-    public virtual LibraryMedia DvdNavigation { get; set; }
+    [InverseProperty("Genre")]
+    public virtual ICollection<LibraryMedia> LibraryMedia { get; set; } = new List<LibraryMedia>();
 }

@@ -8,24 +8,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library_Management_System.Entities;
 
-[Table("Book")]
-[Index("Isbn", IsUnique = true)]
-public partial class Book
+[Table("AudioBook")]
+public partial class AudioBook
 {
     [Key]
-    public int BookId { get; set; }
+    public int AudioBookId { get; set; }
+
+    [Required]
+    public string Narrator { get; set; }
+
+    [Required]
+    public string AudioFormat { get; set; }
 
     [Required]
     public string Author { get; set; }
 
-    [Required]
-    [Column("ISBN")]
-    public string Isbn { get; set; }
-
-    [Required]
-    public string Publisher { get; set; }
-
-    [ForeignKey("BookId")]
-    [InverseProperty("Book")]
-    public virtual LibraryMedia BookNavigation { get; set; }
+    [ForeignKey("AudioBookId")]
+    [InverseProperty("AudioBook")]
+    public virtual LibraryMedia AudioBookNavigation { get; set; }
 }

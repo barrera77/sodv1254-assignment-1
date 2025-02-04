@@ -1,7 +1,7 @@
-﻿using Library_Management_System.DAL;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Library_Management_System.BLL;
+using Library_Management_System.DAL;
 
 namespace Library_Management_System
 {
