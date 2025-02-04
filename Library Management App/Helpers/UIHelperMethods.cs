@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Library_Management_App.UI;
+using Library_Management_System.BLL;
 
 namespace Library_Management_App.Helpers
 {
@@ -14,6 +16,15 @@ namespace Library_Management_App.Helpers
 
         #region main logic methods
 
+        public static void LibraryScreen()
+        {
+            Console.Clear();
+            PrintScreenHeader();
+            LoginScreen();
+
+        }
+
+
         public static void LoginScreen()
         {
             Console.WriteLine("\n");
@@ -23,7 +34,7 @@ namespace Library_Management_App.Helpers
             PrintCentered("L O G I N  🔒\n", "static");
 
             PrintCentered("   1.- Librarian", "static");
-            PrintCentered("  2.- Borrower", "static");
+            PrintCentered("  2.- Member", "static");
             PrintCentered("3.- Quit \n", "static");
             int userOption  = ValidateOption("\t\t\t\t\t      Please Select an option: ", 1, 3);
 
@@ -50,7 +61,11 @@ namespace Library_Management_App.Helpers
                     PrintScreenHeader();
 
                     //TODO: Add Librarian user logic here
-                    Console.ReadLine();
+
+                    var librarianApp = new LibrarianUI();
+                    librarianApp.Run();
+
+                    
 
                     break;
 
@@ -251,6 +266,14 @@ namespace Library_Management_App.Helpers
                 return "";
             }
             return $"👤 Username: {input.ToUpper()} {role}";
+        }
+
+        public static void PrintMenu(string[] menuOptions)
+        {
+            foreach (string option in menuOptions)
+            {
+                Console.WriteLine(option);
+            }
         }
 
 

@@ -22,20 +22,13 @@ namespace Library_Management_App.UI
             UIHelperMethods.IntroScreen();
 
             //Print the library's main screen
-            LibraryScreen();
+            UIHelperMethods.LibraryScreen();
 
         }
 
         #region main functions
 
-        public void LibraryScreen()
-        {
-            Console.Clear();
-            UIHelperMethods.PrintScreenHeader();
-            UIHelperMethods.LoginScreen();
-
-        }
-
+        
         
 
 
