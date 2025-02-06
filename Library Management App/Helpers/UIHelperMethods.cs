@@ -19,7 +19,7 @@ namespace Library_Management_App.Helpers
         public static void LibraryScreen()
         {
             Console.Clear();
-            PrintScreenHeader();
+            PrintScreenHeader(false);
             LoginScreen();
 
         }
@@ -27,6 +27,8 @@ namespace Library_Management_App.Helpers
 
         public static void LoginScreen()
         {
+            Console.Clear();
+            PrintScreenHeader(false);
             Console.WriteLine("\n");
             PrintCentered("W E L C O M E  T O  B V C  L I B R A R Y  S E R V I C E\n", "static");
             Console.WriteLine("\n");
@@ -34,13 +36,11 @@ namespace Library_Management_App.Helpers
             PrintCentered("L O G I N  🔒\n", "static");
 
             PrintCentered("   1.- Librarian", "static");
-            PrintCentered("  2.- Member", "static");
+            PrintCentered(" 2.- Member", "static");
             PrintCentered("3.- Quit \n", "static");
             int userOption  = ValidateOption("\t\t\t\t\t      Please Select an option: ", 1, 3);
 
             HandleLoginOption(userOption);  
-
-
         }
 
         public static void HandleLoginOption(int option)
@@ -52,46 +52,49 @@ namespace Library_Management_App.Helpers
                 case 1:
                     //Request the name of the user
                     Console.WriteLine("\n");
-                    PrintCentered("Please enter your name (optional): ", "prompt");
+                    PrintCentered("Please enter your username (required): ", "prompt");
                     input = Console.ReadLine();
 
-                    userName = ValidateName(input, "Admin");
+                    userName = ValidateUserName(input, "Admin");
 
                     Console.Clear();
-                    PrintScreenHeader();
+                    PrintScreenHeader(true);
 
                     //TODO: Add Librarian user logic here
-
-                    var librarianApp = new LibrarianUI();
+                    LibrarianUI librarianApp = new LibrarianUI();
                     librarianApp.Run();
 
                     
-
                     break;
 
                 case 2:
                     //Request the name of the user
                     Console.WriteLine("\n");
-                    PrintCentered("Please enter your name (optional): ", "prompt");
+                    PrintCentered("Please enter your username (Required): ", "prompt");
                     input = Console.ReadLine();
 
-                    userName = ValidateName(input, "");
+                    userName = ValidateUserName(input, "");
 
                     Console.Clear();
-                    PrintScreenHeader();
+                    PrintScreenHeader(true);
 
                     //TODO: Add Borrower user logic here
-                    Console.ReadLine();
-
+                    BorrowerUI borrowerApp = new BorrowerUI();
+                    borrowerApp.Run();                   
                     break;
 
                 case 3:
 
-                    QuitGame();                   
+                    QuitSystem();                   
 
                     break;
             }
             
+
+        }
+
+        public static void BrowseMediaCatalog()
+        {
 
         }
 
@@ -201,8 +204,14 @@ namespace Library_Management_App.Helpers
         /// <summary>
         /// Create a main header for all pages
         /// </summary>
-        public static void PrintScreenHeader()
+        public static void PrintScreenHeader(bool isLoggedIn)
         {
+            if(!isLoggedIn)
+            {
+                userName = "";
+            }
+            
+
             string[] header = new string[]
           {
             "\t┳┓┓┏┏┓  ┓ •┓           ┏┓                  __________________________________________________________________",
@@ -251,21 +260,34 @@ namespace Library_Management_App.Helpers
         /// <summary>
         /// Allow user to quit the game at any time
         /// </summary>
-        public static void QuitGame()
+        public static void QuitSystem()
         {
             Console.Write("\nThank for using BVC Library System, come back soon!");
             Thread.Sleep(2000); // Pause for 2 seconds
             Environment.Exit(0);
         }
 
-
-        static string ValidateName(string input, string role)
-        {
-            if(string.IsNullOrWhiteSpace(input))
+        //Validate the username
+        static string ValidateUserName(string input, string role)
+        {           
+            while(!ValidStringInput(input))
             {
-                return "";
+                Console.Write("Username cannot be null, please provide a username: ");
+                input = Console.ReadLine();               
             }
+
             return $"👤 Username: {input.ToUpper()} {role}";
+        }
+
+        
+        /// <summary>
+        /// Validate string input
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>if valid input truel, else false</returns>
+        static bool ValidStringInput(string input)
+        {
+            return !string.IsNullOrWhiteSpace(input);
         }
 
         public static void PrintMenu(string[] menuOptions)
@@ -275,6 +297,21 @@ namespace Library_Management_App.Helpers
                 Console.WriteLine(option);
             }
         }
+
+        /// <summary>
+        /// Logout the user
+        /// </summary>
+        public static void LogOut()
+        {
+            Console.WriteLine("\nLogging out . . .");
+            Thread.Sleep(2000);
+            PrintColorText("You have been successfully logged out.", ConsoleColor.Green);
+            Thread.Sleep(1000);
+
+            LoginScreen();
+        }
+
+
 
 
         #endregion
