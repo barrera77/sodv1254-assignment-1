@@ -25,5 +25,5 @@ public partial class AudioBook
 
     [ForeignKey("AudioBookId")]
     [InverseProperty("AudioBook")]
-    public virtual LibraryMedia AudioBookNavigation { get; set; }
+    public virtual MediaLibrary AudioBookNavigation { get; set; }
 }

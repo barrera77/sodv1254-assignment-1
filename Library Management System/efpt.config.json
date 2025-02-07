@@ -1,6 +1,6 @@
 ﻿{
    "CodeGenerationMode": 4,
-   "ContextClassName": "Library.dbContext",
+   "ContextClassName": "LibraryDB.dbContext",
    "ContextNamespace": null,
    "FilterSchemas": false,
    "IncludeConnectionString": true,
@@ -35,11 +35,15 @@
          "ObjectType": 0
       },
       {
-         "Name": "LibraryMedia",
+         "Name": "LibraryTransaction",
          "ObjectType": 0
       },
       {
-         "Name": "LibraryTransaction",
+         "Name": "MediaLibrary",
+         "ObjectType": 0
+      },
+      {
+         "Name": "Users",
          "ObjectType": 0
       }
    ],
@@ -47,7 +51,7 @@
    "UncountableWords": null,
    "UseAsyncStoredProcedureCalls": true,
    "UseBoolPropertiesWithoutDefaultSql": false,
-   "UseDatabaseNames": false,
+   "UseDatabaseNames": true,
    "UseDatabaseNamesForRoutines": true,
    "UseDateOnlyTimeOnly": true,
    "UseDbContextSplitting": false,

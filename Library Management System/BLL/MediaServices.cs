@@ -1,19 +1,14 @@
 ﻿using Library_Management_System.DAL;
 using Library_Management_System.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Library_Management_System.BLL
 {
     public class MediaServices
     {
-        private readonly LibrarydbContext _dbContext;
+        private readonly LibraryDBdbContext _dbContext;
 
-        public MediaServices(LibrarydbContext context)
+        public MediaServices(LibraryDBdbContext context)
         {
             _dbContext = context;
         }
@@ -30,7 +25,7 @@ namespace Library_Management_System.BLL
 
             try
             {
-                List<MediaInventoryView> mediaInventory = _dbContext.LibraryMedia
+                List<MediaInventoryView> mediaInventory = _dbContext.MediaLibraries
                     .Select(m => new MediaInventoryView
                     {
                         MediaId = m.MediaId,
@@ -39,19 +34,17 @@ namespace Library_Management_System.BLL
                         MediaType = m.MediaType,
                         IsAvailable = m.IsAvailable,
                         CreationDate = m.CreationDate,
+                        Language = m.Language,
+                        Duration = m.Duration,
 
-                        Author = m.MediaType == "Book" ? m.Book.Author : (m.MediaType == "AudioBook" ? m.AudioBook.Author : null),
-                        ISBN = m.MediaType == "Book" ? m.Book.Isbn : null,
-                        Publisher = m.MediaType == "Book" ? m.Book.Publisher : null,
-
-                        Director = m.MediaType == "DVD" ? m.Dvd.Director : null,
-                        Actors = m.MediaType == "DVD" ? m.Dvd.Actors : null,
-                        Subtitles = m.MediaType == "DVD" ? m.Dvd.Subtitles : null,
-
-                        Narrator = m.MediaType == "AudioBook" ? m.AudioBook.Narrator : null,
-                        AudioFormat = m.MediaType == "AudioBook" ? m.AudioBook.AudioFormat : null,
+                        Genre = _dbContext.Genres
+                        .Where(g => g.GenreId == m.GenreId)
+                        .Select(g => g.Name)
+                        .FirstOrDefault()   
+                       
                     })
                     .ToList();
+                Console.WriteLine($"Query Executed: Retrieved {mediaInventory.Count} records.");
 
                 return mediaInventory;
 

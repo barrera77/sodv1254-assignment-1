@@ -9,11 +9,10 @@ using Microsoft.EntityFrameworkCore;
 namespace Library_Management_System.Entities;
 
 [Table("DVD")]
-public partial class Dvd
+public partial class DVD
 {
     [Key]
-    [Column("DVDId")]
-    public int Dvdid { get; set; }
+    public int DVDId { get; set; }
 
     [Required]
     public string Director { get; set; }
@@ -22,7 +21,7 @@ public partial class Dvd
 
     public string Subtitles { get; set; }
 
-    [ForeignKey("Dvdid")]
-    [InverseProperty("Dvd")]
-    public virtual LibraryMedia DvdNavigation { get; set; }
+    [ForeignKey("DVDId")]
+    [InverseProperty("DVD")]
+    public virtual MediaLibrary DVDNavigation { get; set; }
 }

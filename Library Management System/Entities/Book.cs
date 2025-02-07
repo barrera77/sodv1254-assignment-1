@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Library_Management_System.Entities;
 
 [Table("Book")]
-[Index("Isbn", IsUnique = true)]
+[Index("ISBN", IsUnique = true)]
 public partial class Book
 {
     [Key]
@@ -19,13 +19,12 @@ public partial class Book
     public string Author { get; set; }
 
     [Required]
-    [Column("ISBN")]
-    public string Isbn { get; set; }
+    public string ISBN { get; set; }
 
     [Required]
     public string Publisher { get; set; }
 
     [ForeignKey("BookId")]
     [InverseProperty("Book")]
-    public virtual LibraryMedia BookNavigation { get; set; }
+    public virtual MediaLibrary BookNavigation { get; set; }
 }

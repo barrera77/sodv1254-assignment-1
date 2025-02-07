@@ -3,17 +3,23 @@ using Library_Management_System.DAL;
 using Library_Management_System.ViewModels;
 using Library_Management_App.Helpers;
 using System.Text;
+using Microsoft.Data.Sqlite;
+using SQLitePCL;
+using Library_Management_System.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library_Management_App.UI
 {
     internal class App
     {
-        
-        private readonly MediaServices _mediaServices;
+        private readonly LibrarianUI _librarianUI;
+        private readonly BorrowerUI _borrowerUI;
+        public readonly MediaServices _mediaServices;
 
-        public App(LibrarydbContext dbContext)
+        public App(LibrarianUI librarianUI, BorrowerUI borrowerUI) // ✅ Inject MediaServices here
         {
-            _mediaServices = new MediaServices(dbContext);
+            _librarianUI = librarianUI;
+            _borrowerUI = borrowerUI;
         }
 
         public void Run()
@@ -22,7 +28,9 @@ namespace Library_Management_App.UI
             UIHelperMethods.IntroScreen();
 
             //Print the library's main screen
-            UIHelperMethods.LibraryScreen();
+             UIHelperMethods.LibraryScreen();
+
+          
 
         }
 

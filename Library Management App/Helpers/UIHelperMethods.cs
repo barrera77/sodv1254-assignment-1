@@ -1,16 +1,15 @@
-﻿using Library_Management_System.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Library_Management_System.DAL;
 using System.Text;
-using System.Threading.Tasks;
 using Library_Management_App.UI;
 using Library_Management_System.BLL;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace Library_Management_App.Helpers
 {
     internal class UIHelperMethods
     {
+        
         static string userName;
 
 
@@ -61,10 +60,8 @@ namespace Library_Management_App.Helpers
                     PrintScreenHeader(true);
 
                     //TODO: Add Librarian user logic here
-                    LibrarianUI librarianApp = new LibrarianUI();
-                    librarianApp.Run();
-
-                    
+                    var librarianUI = Program.CreateHostBuilder(new string[] { }).Build().Services.GetRequiredService<LibrarianUI>();
+                    librarianUI.Run();
                     break;
 
                 case 2:
@@ -79,8 +76,8 @@ namespace Library_Management_App.Helpers
                     PrintScreenHeader(true);
 
                     //TODO: Add Borrower user logic here
-                    BorrowerUI borrowerApp = new BorrowerUI();
-                    borrowerApp.Run();                   
+                    var borrowerUI = Program.CreateHostBuilder(new string[] { }).Build().Services.GetRequiredService<BorrowerUI>();
+                    borrowerUI.Run();                   
                     break;
 
                 case 3:

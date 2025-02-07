@@ -8,16 +8,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library_Management_System.Entities;
 
-[Table("Genre")]
-[Index("Name", IsUnique = true)]
-public partial class Genre
+[Index("Username", IsUnique = true)]
+public partial class User
 {
     [Key]
-    public int GenreId { get; set; }
+    public int UserId { get; set; }
 
     [Required]
-    public string Name { get; set; }
+    public string Username { get; set; }
 
-    [InverseProperty("Genre")]
-    public virtual ICollection<MediaLibrary> MediaLibraries { get; set; } = new List<MediaLibrary>();
+    [Required]
+    public string PasswordHash { get; set; }
+
+    [Required]
+    public string FullName { get; set; }
+
+    [Required]
+    public string Role { get; set; }
 }

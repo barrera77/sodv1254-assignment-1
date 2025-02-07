@@ -9,9 +9,9 @@ namespace Library_Management_System.BLL
 {
     public class BorrowerServices
     {
-        private readonly LibrarydbContext _dbContext;
+        private readonly LibraryDBdbContext _dbContext;
 
-        internal BorrowerServices(LibrarydbContext dbContext)
+        internal BorrowerServices(LibraryDBdbContext dbContext)
         {
             _dbContext = dbContext;
         }

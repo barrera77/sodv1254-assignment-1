@@ -56,7 +56,7 @@ namespace Library_Management_App.UI
                         break;
 
                     case 3:
-                        UIHelperMethods.LogOut();
+                        //UIHelperMethods.LogOut();
                         break;
 
                     case 4:

@@ -19,10 +19,10 @@ public partial class LibraryTransaction
     public int MediaId { get; set; }
 
     [Column(TypeName = "DATE")]
-    public DateTime BorrowDate { get; set; }
+    public DateOnly BorrowDate { get; set; }
 
     [Column(TypeName = "DATE")]
-    public DateTime? ReturnDate { get; set; }
+    public DateOnly? ReturnDate { get; set; }
 
     [ForeignKey("BorrowerId")]
     [InverseProperty("LibraryTransactions")]
@@ -30,5 +30,5 @@ public partial class LibraryTransaction
 
     [ForeignKey("MediaId")]
     [InverseProperty("LibraryTransactions")]
-    public virtual LibraryMedia Media { get; set; }
+    public virtual MediaLibrary Media { get; set; }
 }

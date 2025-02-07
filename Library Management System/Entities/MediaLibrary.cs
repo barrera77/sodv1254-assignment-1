@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library_Management_System.Entities;
 
-public partial class LibraryMedia
+[Table("MediaLibrary")]
+public partial class MediaLibrary
 {
     [Key]
     public int MediaId { get; set; }
@@ -39,11 +40,11 @@ public partial class LibraryMedia
     [InverseProperty("BookNavigation")]
     public virtual Book Book { get; set; }
 
-    [InverseProperty("DvdNavigation")]
-    public virtual Dvd Dvd { get; set; }
+    [InverseProperty("DVDNavigation")]
+    public virtual DVD DVD { get; set; }
 
     [ForeignKey("GenreId")]
-    [InverseProperty("LibraryMedia")]
+    [InverseProperty("MediaLibraries")]
     public virtual Genre Genre { get; set; }
 
     [InverseProperty("Media")]

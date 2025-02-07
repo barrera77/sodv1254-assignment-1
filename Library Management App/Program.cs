@@ -1,44 +1,39 @@
-﻿using Library_Management_System.DAL;
-using Library_Management_System.BLL;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Library_Management_System.BLL;
+using Library_Management_System.DAL;
+using Library_Management_App.UI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Library_Management_App.UI;
+using Microsoft.EntityFrameworkCore;
 
 class Program
 {
     static void Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
-        var app = ActivatorUtilities.CreateInstance<App>(host.Services);
+        var app = host.Services.GetRequiredService<App>(); 
         app.Run();
     }
 
-    static IHostBuilder CreateHostBuilder(string[] args) =>
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((context, config) =>
-            {
-                config.SetBasePath(Directory.GetCurrentDirectory());
-                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-                config.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
-            })
             .ConfigureServices((context, services) =>
             {
-                var connectionString = context.Configuration.GetConnectionString("LibraryDB");
-                services.AddDbContext<LibrarydbContext>(options =>
+                var connectionString = "Data Source=LibraryDB.db";
+
+                //  Register DbContext
+                services.AddDbContext<LibraryDBdbContext>(options =>
                     options.UseSqlite(connectionString));
 
+                // Register Services
                 services.AddTransient<MediaServices>();
                 services.AddTransient<BorrowerServices>();
                 services.AddTransient<TransactionServices>();
 
-                services.AddTransient<App>(); 
-            })
-            .ConfigureLogging(logging =>
-            {
-                logging.ClearProviders();
-                logging.AddConsole();
+                //  Register UI Components
+                services.AddTransient<LibrarianUI>();
+                services.AddTransient<BorrowerUI>();
+
+                //  Register App
+                services.AddTransient<App>();
             });
 }
