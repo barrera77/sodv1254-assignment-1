@@ -10,7 +10,7 @@ namespace Library_Management_System.ViewModels
     {
         public int DvdId { get; set; }
         public string Director { get; set; }
-        public int Runtime {  get; set; }
-
+        public string Subtitles { get; set; }
+        public string Actors { get; set; }  
     }
 }

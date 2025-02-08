@@ -120,7 +120,7 @@ namespace Library_Management_App.UI
                 switch (option)
                 {
                     case 1:
-                        DisplayInventory();
+                    UIHelperMethods.DisplayInventory(_mediaServices, mediaInventory);
                         break;
 
                     case 2:
@@ -178,56 +178,7 @@ namespace Library_Management_App.UI
 
         }
 
-        public void DisplayInventory()
-        {            
-            try
-            {
-                mediaInventory = _mediaServices.GetMediaInventory();
-
-                if(mediaInventory == null || !mediaInventory.Any())
-                {
-                    Console.WriteLine("No media found in the inventory.");
-                    return;
-                }
-            }
-            catch (AggregateException ex)
-            {
-                if(string.IsNullOrWhiteSpace(errorMessage))
-                {
-                    errorMessage += Environment.NewLine;
-                }
-
-                foreach (Exception error in ex.InnerExceptions)
-                {
-                    errorDetails.Add(error.Message);
-                }
-
-            }
-
-            if (mediaInventory == null || !mediaInventory.Any())
-            {
-                Console.WriteLine("No media items found.");
-                Console.ReadLine();
-                return;
-            }
-
-
-            var table = new ConsoleTable("Title", "Media Type", "Available", "Language", "Duration", "Genre");
-
-            foreach (var item in mediaInventory)
-            {
-                table.AddRow(
-                    item.Title,                   
-                    item.MediaType,
-                    item.IsAvailable == true ? "Yes" : "No",
-                    item.Language,
-                    item.Duration.HasValue ? item.Duration.Value.ToString() : "N/A",
-                    item.Genre
-                    );
-            }
-            table.Write();
-            Console.ReadLine();
-        }
+       
 
 
     }

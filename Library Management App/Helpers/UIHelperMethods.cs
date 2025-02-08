@@ -3,13 +3,19 @@ using System.Text;
 using Library_Management_App.UI;
 using Library_Management_System.BLL;
 using Microsoft.Extensions.DependencyInjection;
+using ConsoleTables;
+using Library_Management_System.ViewModels;
 
 
 namespace Library_Management_App.Helpers
 {
     internal class UIHelperMethods
     {
-        
+        static string feedbackMessage;
+        static string errorMessage;
+
+        static List<string> errorDetails = new List<string>();
+
         static string userName;
 
 
@@ -90,12 +96,165 @@ namespace Library_Management_App.Helpers
 
         }
 
-        public static void BrowseMediaCatalog()
+        public static void DisplayInventory(MediaServices mediaServices, List<MediaInventoryView> mediaInventory)
         {
+            try
+            {
+                mediaInventory = mediaServices.GetMediaInventory();
+
+                if (mediaInventory == null || !mediaInventory.Any())
+                {
+                    Console.WriteLine("No media found in the inventory.");
+                    return;
+                }
+            }
+            catch (AggregateException ex)
+            {
+                if (!string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    errorMessage += Environment.NewLine;
+                }
+
+                errorMessage += "Unable to process refund";
+                foreach (Exception error in ex.InnerExceptions)
+                {
+                    errorDetails.Add(error.Message);
+                }               
+            }            
+            catch (Exception ex)
+            {
+                errorMessage = ExceptionHelperClass.GetInnerException(ex).Message;
+            }
+
+            if (mediaInventory == null || !mediaInventory.Any())
+            {
+                Console.WriteLine("No media items found.");
+                Console.ReadLine();
+                return;
+            }
+
+
+            var table = new ConsoleTable("Title", "Media Type", "Available", "Language", "Duration", "Genre");
+
+            foreach (var item in mediaInventory)
+            {
+                table.AddRow(
+                    item.Title,
+                    item.MediaType,
+                    item.IsAvailable == true ? "Yes" : "No",
+                    item.Language,
+                    item.Duration.HasValue ? item.Duration.Value.ToString() : "N/A",
+                    item.Genre
+                    );
+            }
+            table.Write();
+            Console.ReadLine();
+        }
+
+        /// <summary>
+        /// Return a list of media based on the type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="getMediaMethod"></param>
+        /// <param name="mediaType"></param>
+        /// <param name="tableHeaders"></param>
+        public static void BrowseMedia<T>(Func<List<T>> getMediaMethod, string mediaType)
+        {
+            List<T> mediaList = new List<T>();
+
+            try
+            {
+                mediaList = getMediaMethod();
+            }
+            catch (AggregateException ex)
+            {
+                if (!string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    errorMessage += Environment.NewLine;
+                }
+
+                errorMessage += "Unable to process refund";
+                foreach (Exception error in ex.InnerExceptions)
+                {
+                    errorDetails.Add(error.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ExceptionHelperClass.GetInnerException(ex).Message;
+            }
+
+            if (mediaList == null || !mediaList.Any())
+            {
+                Console.WriteLine($"No {mediaType}s found.");
+                Console.ReadLine();
+                return;
+            }
+
+            ConsoleTable table;
+
+            switch (mediaType.ToLower())
+            {
+                case "book":
+                    table = new ConsoleTable("Id", "Title", "Author", "ISBN", "Available", "Genre");
+
+                    foreach (var item in mediaList.Cast<BookView>())
+                    {
+                        table.AddRow(
+                            item.BookId,
+                            item.Title,
+                            item.Author,
+                            item.ISBN,
+                            item.IsAvailable == true ? "Yes" : "no",
+                            item.Genre
+                            );
+                    }
+                    break;
+
+                case "dvd":
+                    table = new ConsoleTable("Id", "Title", "Actors", "Subtitles", "Available", "Genre");
+
+                    foreach (var item in mediaList.Cast<DvdView>())
+                    {
+                        table.AddRow(
+                            item.DvdId,
+                            item.Title,
+                            item.Actors,
+                            item.Subtitles,
+                            item.IsAvailable == true ? "Yes" : "no",
+                            item.Genre
+                            );
+                    }
+                    break;
+
+                case "audiobook":
+                    table = new ConsoleTable("Id", "Title", "Author", "Narrator", "Available", "Genre");
+
+                    foreach (var item in mediaList.Cast<AudioBookView>())
+                    {
+                        table.AddRow(
+                            item.AudioBookId,
+                            item.Title,
+                            item.Author,
+                            item.Narrator,
+                            item.IsAvailable == true ? "Yes" : "no",
+                            item.Genre
+                            );
+                    }
+                    break;
+
+                default:
+                    Console.Write("Unsupported Media Type. Press any key to continue...");
+                    Console.ReadKey();
+
+                    return;
+            }
+            table.Write();
+            Console.ReadLine();
 
         }
 
-        
+
 
         #endregion
 
