@@ -1,7 +1,8 @@
 ﻿using Library_Management_System.DAL;
 using Library_Management_System.Entities;
 using Library_Management_System.ViewModels;
-using System.Security.Cryptography.X509Certificates;
+using Library_Management_System.BLL;
+
 
 
 namespace Library_Management_System.BLL
@@ -9,10 +10,13 @@ namespace Library_Management_System.BLL
     public class MediaServices
     {
         private readonly LibraryDBdbContext _dbContext;
+        private readonly TransactionServices _transactionServices;
 
-        public MediaServices(LibraryDBdbContext context)
+        public MediaServices(LibraryDBdbContext context, TransactionServices transactionServices)
         {
             _dbContext = context;
+            _transactionServices = transactionServices;
+            
         }
 
         private string errorMessage;
@@ -167,6 +171,36 @@ namespace Library_Management_System.BLL
                 errorList.Add(ex);
                 throw new AggregateException("An error ocurred retrieving the Audiobooks from the system", ex);
             }
+        }
+
+        public BookView ProcessMediakBorrowing(int mediaId, string mediaType, int borrowerId)
+        {
+
+            var media = _dbContext.MediaLibraries.FirstOrDefault(m => m.MediaId == mediaId);
+
+            if(media == null)
+            {
+                throw new ArgumentException("Media not found");
+            }
+
+            if(!media.IsAvailable)
+            {
+                throw new InvalidOperationException("Media not available for borrowing at this time");
+            }
+
+            //Change media status
+            media.IsAvailable = false;
+
+            _dbContext.SaveChanges();
+
+            //Create transaction
+            _transactionServices.CreateLibraryTransaction(mediaId, borrowerId, mediaType);
+
+
+            return new BookView();
+
+          
+
         }
     }
 }

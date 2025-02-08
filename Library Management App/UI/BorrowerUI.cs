@@ -126,16 +126,16 @@ namespace Library_Management_App.UI
                     break;
 
                 case 2:
-                    UIHelperMethods.BrowseMedia(_mediaServices.GetAllBooks, "book");
+                    BorrowMedia("book");
                     break;
 
                 case 3:
-                    UIHelperMethods.BrowseMedia(_mediaServices.GetAllDvds, "dvd");
+                    BorrowMedia("dvd");
 
                     break;
 
                 case 4:
-                    UIHelperMethods.BrowseMedia(_mediaServices.GetAllAudioBooks, "audiobook");
+                    BorrowMedia("audiobook");
 
                     break;
 
@@ -149,45 +149,136 @@ namespace Library_Management_App.UI
             }
         }
 
-        public void MediaBorrowingMenu(string mediaType)
+       /// <summary>
+       /// Borrow media from library
+       /// </summary>
+       /// <param name="mediaType"></param>
+        public void BorrowMedia(string mediaType)
         {
-            bool isValidId = true;
-            int option;
-
-
-            while (isValidId)
+            switch (mediaType.ToLower())
             {
-                Console.Write("Enter the id of the item you wish to borrow: ");
-                isValidId = int.TryParse(Console.ReadLine(), out option);
+                case "book":
+                    //get the requested media inventory
+                    booksList = UIHelperMethods.BrowseMedia(_mediaServices.GetAllBooks, "book");
 
-                if (isValidId)
-                {
-                    switch(mediaType.ToLower())
-                    {
-                        case "book":
-                            booksList.Any(b => b.BookId == option);
-                            break;
+                    //Process the request
+                    HandleBorrowingOptions("book");
+                    break;
 
-                        case "dvd":
+                case "dvd":
+                    //get the requested media inventory
+                    dvdList = UIHelperMethods.BrowseMedia(_mediaServices.GetAllDvds, "dvd");
 
-                            break;
-                    }
+                    //Process the request
+                    HandleBorrowingOptions("dvd");
+                    break;
 
-                }
+                case "audiobook":
+                    //get the requested media inventory
+                    audioBookList = UIHelperMethods.BrowseMedia(_mediaServices.GetAllAudioBooks, "audiobook");
 
-
-
-                
-
+                    //Process the request
+                    HandleBorrowingOptions("audiobook");
+                    break;            
             }
         }
 
-     
+        /// <summary>
+        /// Handle the borrowing logic
+        /// </summary>
+        /// <param name="mediaType"></param>
+        public void HandleBorrowingOptions(string mediaType)
+        {
+            bool isValidInput = true;
+            int option;
 
-       
-        
+            while (isValidInput)
+            {
+                Console.Write("Enter the id of the item you wish to borrow or c to cancel and go back to the previous menu: ");
+                string input = Console.ReadLine()?.Trim();
 
+                if(!string.IsNullOrWhiteSpace(input) && input.Equals("C", StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
 
+                if (int.TryParse(input, out option))
+                {
+                    switch (mediaType.ToLower())
+                    {
+                        case "book":
+                            var book = booksList.FirstOrDefault(b => b.BookId == option);
+
+                            if(book == null)
+                            {
+                                Console.WriteLine("Invalid ID...");
+                            }
+                            else if(!book.IsAvailable)
+                            {
+                                Console.WriteLine($"Sorry the selected {mediaType} i currently unavailable...");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"The {mediaType}  {book.Title} is available");
+                                Console.ReadLine();
+                                isValidInput = false;
+                                break;
+                            }
+                            break;
+
+                        case "dvd":
+                            var dvdItemt = dvdList.FirstOrDefault(d => d.DvdId == option);
+
+                            if (dvdItemt == null)
+                            {
+                                Console.WriteLine("Invalid ID...");
+                            }
+                            else if (!dvdItemt.IsAvailable)
+                            {
+                                Console.WriteLine($"Sorry the selected {mediaType} is currently unavailable...");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"The {mediaType}  {dvdItemt.Title} is available");
+                                Console.ReadLine();
+                                isValidInput = false;
+                                break;
+                            }
+                            break;
+
+                        case "audiobook":
+                            var audiobook = audioBookList.FirstOrDefault(ab => ab.AudioBookId == option);
+
+                            if (audiobook == null)
+                            {
+                                Console.WriteLine("Invalid ID...");
+                            }
+                            else if (!audiobook.IsAvailable)
+                            {
+                                Console.WriteLine($"Sorry the selected {mediaType} is currently unavailable...");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"The {mediaType}  {audiobook.Title} is available");
+                                Console.ReadLine();
+                                isValidInput = false;
+                                break;
+                            }
+                            break;
+
+                        default:
+                            Console.WriteLine("Invalid Media Type...");
+                            return;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input please enter a numeric ID");
+                }
+            }
+        }
+
+        public void 
 
     }
 }

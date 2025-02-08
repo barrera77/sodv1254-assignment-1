@@ -158,7 +158,7 @@ namespace Library_Management_App.Helpers
         /// <param name="getMediaMethod"></param>
         /// <param name="mediaType"></param>
         /// <param name="tableHeaders"></param>
-        public static void BrowseMedia<T>(Func<List<T>> getMediaMethod, string mediaType)
+        public static List<T> BrowseMedia<T>(Func<List<T>> getMediaMethod, string mediaType)
         {
             List<T> mediaList = new List<T>();
 
@@ -188,7 +188,7 @@ namespace Library_Management_App.Helpers
             {
                 Console.WriteLine($"No {mediaType}s found.");
                 Console.ReadLine();
-                return;
+                return new List<T>();
             }
 
             ConsoleTable table;
@@ -247,11 +247,10 @@ namespace Library_Management_App.Helpers
                     Console.Write("Unsupported Media Type. Press any key to continue...");
                     Console.ReadKey();
 
-                    return;
+                    return new List<T>();
             }
             table.Write();
-            Console.ReadLine();
-
+            return mediaList;
         }
 
 
@@ -277,9 +276,6 @@ namespace Library_Management_App.Helpers
             {
                 Console.Write(text.PadLeft(leftPadding + text.Length));
             }
-
-
-
         }
 
         /// <summary>
